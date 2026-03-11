@@ -605,6 +605,7 @@ public:
 	int TranslateSnap(CSnapshot *pSnapDstSix, CSnapshot *pSnapSrcSeven, int Conn, bool Dummy) override;
 	void OnMessage(int MsgId, CUnpacker *pUnpacker, int Conn, bool Dummy) override;
 	void InvalidateSnapshot() override;
+	void SuppressEvents(bool Suppress) override;
 	void OnNewSnapshot() override;
 	void OnPredict() override;
 	void OnActivateEditor() override;

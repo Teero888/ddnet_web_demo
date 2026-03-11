@@ -842,7 +842,7 @@ void CGameClient::OnRender()
 	for(auto &pComponent : m_vpAll)
 	{
 #if defined(CONF_PLATFORM_EMSCRIPTEN)
-		if(Client()->State() == IClient::STATE_DEMOPLAYBACK)
+		if(Client()->State() == IClient::STATE_DEMOPLAYBACK || Client()->State() == IClient::STATE_OFFLINE)
 		{
 			if(pComponent == &m_Menus || pComponent == &m_Motd ||
 				pComponent == &m_Scoreboard || pComponent == &m_Broadcast ||
@@ -1680,7 +1680,12 @@ void CGameClient::InvalidateSnapshot()
 	mem_zero(&m_Snap, sizeof(m_Snap));
 	m_Snap.m_SpecInfo.m_Zoom = 1.0f;
 	m_Snap.m_LocalClientId = -1;
-	SnapCollectEntities();
+	m_Snap.m_SpecInfo.m_SpectatorId = -1;
+}
+
+void CGameClient::SuppressEvents(bool Suppress)
+{
+	m_SuppressEvents = Suppress;
 }
 
 void CGameClient::OnNewSnapshot()
