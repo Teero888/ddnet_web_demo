@@ -9,6 +9,10 @@
 #include <base/system.h>
 #include <base/vmath.h>
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 #include <engine/client.h>
 #include <engine/client/updater.h>
 #include <engine/config.h>
@@ -2502,6 +2506,21 @@ void CMenus::OnRender()
 		PopupMessage(Localize("Disconnected"), Localize("The server is running a non-standard tuning on a pure game type."), Localize("Ok"));
 	}
 
+#if defined(__EMSCRIPTEN__)
+	// Intercept Escape to close the demo viewer
+	if(Ui()->ConsumeHotkey(CUi::HOTKEY_ESCAPE))
+	{
+		EM_ASM({
+			if(window.parent) window.parent.postMessage({ type: 'closeDemoViewer' }, '*');
+		});
+	}
+
+	// Always keep menu active during demo playback so the timeline is shown
+	if(Client()->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		SetActive(true);
+	}
+#else
 	if(!IsActive())
 	{
 		if(Ui()->ConsumeHotkey(CUi::HOTKEY_ESCAPE))
@@ -2514,25 +2533,43 @@ void CMenus::OnRender()
 			return;
 		}
 	}
+#endif
 
 	Ui()->StartCheck();
 	UpdateColors();
 
 	Ui()->Update();
 
-	Render();
+#if defined(__EMSCRIPTEN__)
+	// In Emscripten, don't render the offline UI (no "ugly game load UI"), just clear screen if not playing a demo
+	if(Client()->State() == IClient::STATE_OFFLINE && m_Popup == POPUP_NONE)
+	{
+		// Render nothing, let the screen remain clear
+	}
+	else
+#endif
+	{
+		Render();
+	}
 
 	if(IsActive())
 	{
+#if defined(__EMSCRIPTEN__)
+		if(Client()->State() == IClient::STATE_DEMOPLAYBACK)
+			RenderTools()->RenderCursor(Ui()->MousePos(), 24.0f);
+#else
 		RenderTools()->RenderCursor(Ui()->MousePos(), 24.0f);
+#endif
 	}
 
 	// render debug information
 	if(g_Config.m_Debug)
 		Ui()->DebugRender(2.0f, Ui()->Screen()->h - 12.0f);
 
+#if !defined(__EMSCRIPTEN__)
 	if(Ui()->ConsumeHotkey(CUi::HOTKEY_ESCAPE))
 		SetActive(false);
+#endif
 
 	Ui()->FinishCheck();
 	Ui()->ClearHotkeys();

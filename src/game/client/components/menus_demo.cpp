@@ -8,7 +8,11 @@
 #include <base/math.h>
 #include <base/system.h>
 
-#include <engine/client.h>
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
+#include <engine/demo.h>
 #include <engine/demo.h>
 #include <engine/font_icons.h>
 #include <engine/graphics.h>
@@ -709,6 +713,11 @@ void CMenus::RenderDemoPlayer(CUIRect MainView)
 		Client()->Disconnect();
 		SetMenuPage(PAGE_DEMOS);
 		DemolistOnUpdate(false);
+#if defined(__EMSCRIPTEN__)
+		EM_ASM({
+			if(window.parent) window.parent.postMessage({ type: 'closeDemoViewer' }, '*');
+		});
+#endif
 	}
 	GameClient()->m_Tooltips.DoToolTip(&s_ExitButton, &Button, Localize("Close the demo player"));
 
