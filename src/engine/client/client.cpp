@@ -4560,9 +4560,12 @@ void CClient::RegisterCommands()
 	m_pConsole->Chain("stdout_output_level", ConchainStdoutOutputLevel, this);
 }
 
+static CClient *g_pClient = nullptr;
+
 static CClient *CreateClient()
 {
-	return new CClient;
+	g_pClient = new CClient;
+	return g_pClient;
 }
 
 void CClient::HandleConnectAddress(const NETADDR *pAddr)
@@ -5427,3 +5430,89 @@ void CClient::SetLoggers(std::shared_ptr<ILogger> &&pFileLogger, std::shared_ptr
 	m_pFileLogger = pFileLogger;
 	m_pStdoutLogger = pStdoutLogger;
 }
+
+#if defined(CONF_PLATFORM_EMSCRIPTEN)
+#include <emscripten.h>
+
+extern "C" {
+
+EMSCRIPTEN_KEEPALIVE void EmscriptenDemoStop()
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+		g_pClient->Disconnect();
+}
+
+EMSCRIPTEN_KEEPALIVE void EmscriptenDemoPause(int Pause)
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		if(Pause)
+			g_pClient->GetDemoPlayer().Pause();
+		else
+			g_pClient->GetDemoPlayer().Unpause();
+	}
+}
+
+EMSCRIPTEN_KEEPALIVE void EmscriptenDemoSetSpeed(float Speed)
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		g_pClient->GetDemoPlayer().SetSpeed(Speed);
+	}
+}
+
+EMSCRIPTEN_KEEPALIVE void EmscriptenDemoSetPos(int Tick)
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		g_pClient->GetDemoPlayer().SetPos(Tick);
+	}
+}
+
+EMSCRIPTEN_KEEPALIVE int EmscriptenDemoIsPaused()
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		return g_pClient->GetDemoPlayer().BaseInfo()->m_Paused ? 1 : 0;
+	}
+	return 0;
+}
+
+EMSCRIPTEN_KEEPALIVE float EmscriptenDemoGetSpeed()
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		return g_pClient->GetDemoPlayer().BaseInfo()->m_Speed;
+	}
+	return 1.0f;
+}
+
+EMSCRIPTEN_KEEPALIVE int EmscriptenDemoGetFirstTick()
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		return g_pClient->GetDemoPlayer().BaseInfo()->m_FirstTick;
+	}
+	return 0;
+}
+
+EMSCRIPTEN_KEEPALIVE int EmscriptenDemoGetCurrentTick()
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		return g_pClient->GetDemoPlayer().BaseInfo()->m_CurrentTick;
+	}
+	return 0;
+}
+
+EMSCRIPTEN_KEEPALIVE int EmscriptenDemoGetLastTick()
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		return g_pClient->GetDemoPlayer().BaseInfo()->m_LastTick;
+	}
+	return 0;
+}
+
+}
+#endif

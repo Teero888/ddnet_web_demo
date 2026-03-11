@@ -79,6 +79,9 @@ class CClient : public IClient, public CDemoPlayer::IListener
 
 	CNetClient m_aNetClient[NUM_CONNS];
 	CDemoPlayer m_DemoPlayer;
+public:
+	CDemoPlayer &GetDemoPlayer() { return m_DemoPlayer; }
+private:
 	CDemoRecorder m_aDemoRecorder[RECORDER_MAX];
 	CDemoEditor m_DemoEditor;
 	CGhostRecorder m_GhostRecorder;
