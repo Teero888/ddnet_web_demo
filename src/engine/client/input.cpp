@@ -291,6 +291,11 @@ void CInput::MouseModeAbsolute()
 
 void CInput::MouseModeRelative()
 {
+#if defined(CONF_PLATFORM_EMSCRIPTEN)
+	// For web demo viewer, never capture mouse
+	MouseModeAbsolute();
+	return;
+#endif
 	m_InputGrabbed = true;
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	Graphics()->SetWindowGrab(true);
