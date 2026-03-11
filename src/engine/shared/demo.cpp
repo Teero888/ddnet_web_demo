@@ -811,6 +811,10 @@ void CDemoPlayer::Pause()
 
 void CDemoPlayer::Unpause()
 {
+	if(m_Info.m_Info.m_CurrentTick >= m_Info.m_Info.m_LastTick)
+	{
+		SetPos(m_Info.m_Info.m_FirstTick);
+	}
 	m_Info.m_Info.m_Paused = false;
 #if defined(CONF_VIDEORECORDER)
 	if(m_UseVideo && IVideo::Current() && g_Config.m_ClVideoPauseWithDemo)

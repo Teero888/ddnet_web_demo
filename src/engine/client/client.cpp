@@ -2736,7 +2736,15 @@ void CClient::Update()
 		{
 			// Disconnect when demo playback stopped, either due to playback error
 			// or because the end of the demo was reached when rendering it.
+#if !defined(CONF_PLATFORM_EMSCRIPTEN)
 			DisconnectWithReason(m_DemoPlayer.ErrorMessage());
+#else
+			if(m_DemoPlayer.ErrorMessage()[0] != '\0')
+			{
+				DisconnectWithReason(m_DemoPlayer.ErrorMessage());
+			}
+			// Otherwise just stay in state, demo.cpp handles pausing at the end
+#endif
 			if(m_DemoPlayer.ErrorMessage()[0] != '\0')
 			{
 				SWarning Warning(Localize("Error playing demo"), m_DemoPlayer.ErrorMessage());
