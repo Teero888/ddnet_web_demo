@@ -844,11 +844,11 @@ void CGameClient::OnRender()
 #if defined(CONF_PLATFORM_EMSCRIPTEN)
 		if(Client()->State() == IClient::STATE_DEMOPLAYBACK)
 		{
-			if(pComponent == &m_Hud || pComponent == &m_NamePlates || pComponent == &m_Motd ||
-				pComponent == &m_Scoreboard || pComponent == &m_Chat || pComponent == &m_Broadcast ||
-				pComponent == &m_Spectator || pComponent == &m_FreezeBars || pComponent == &m_Statboard ||
-				pComponent == &m_Emoticon || pComponent == &m_InfoMessages || pComponent == &m_ImportantAlert ||
-				pComponent == &m_DebugHud || pComponent == &m_TouchControls || pComponent == &m_DamageInd)
+			if(pComponent == &m_Menus || pComponent == &m_Motd ||
+				pComponent == &m_Scoreboard || pComponent == &m_Broadcast ||
+				pComponent == &m_Statboard || pComponent == &m_InfoMessages ||
+				pComponent == &m_ImportantAlert || pComponent == &m_DebugHud ||
+				pComponent == &m_TouchControls)
 				continue;
 		}
 #endif
