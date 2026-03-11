@@ -2541,7 +2541,6 @@ void CMenus::OnRender()
 	Ui()->Update();
 
 #if defined(__EMSCRIPTEN__)
-	// In Emscripten, don't render the offline UI (no "ugly game load UI"), just clear screen if not playing a demo
 	if(Client()->State() == IClient::STATE_OFFLINE && m_Popup == POPUP_NONE)
 	{
 		// Render nothing, let the screen remain clear
