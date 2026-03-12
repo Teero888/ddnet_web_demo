@@ -68,7 +68,7 @@ class CSound : public IEngineSound
 		NUM_CHANNELS = 16,
 	};
 
-	bool m_SoundEnabled = false;
+	bool m_SoundEnabled = true;
 	SDL_AudioDeviceID m_Device = 0;
 	CLock m_SoundLock;
 

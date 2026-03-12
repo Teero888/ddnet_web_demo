@@ -1715,7 +1715,11 @@ int CGraphicsBackend_SDL_GL::GetWindowScreen()
 
 int CGraphicsBackend_SDL_GL::WindowActive()
 {
+#if defined(CONF_PLATFORM_EMSCRIPTEN)
+	return 1;
+#else
 	return m_pWindow && SDL_GetWindowFlags(m_pWindow) & SDL_WINDOW_INPUT_FOCUS;
+#endif
 }
 
 int CGraphicsBackend_SDL_GL::WindowOpen()

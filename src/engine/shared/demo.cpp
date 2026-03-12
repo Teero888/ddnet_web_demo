@@ -839,6 +839,7 @@ int CDemoPlayer::Load(class IStorage *pStorage, class IConsole *pConsole, const 
 
 	// clear the playback info
 	mem_zero(&m_Info, sizeof(m_Info));
+	m_Info.m_Info.m_Paused = true;
 	m_Info.m_Info.m_FirstTick = -1;
 	m_Info.m_Info.m_LastTick = -1;
 	m_Info.m_NextTick = -1;

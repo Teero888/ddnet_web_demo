@@ -258,8 +258,6 @@ int CSound::Update()
 void CSound::UpdateVolume()
 {
 	int WantedVolume = g_Config.m_SndVolume;
-	if(!m_pGraphics->WindowActive() && g_Config.m_SndNonactiveMute)
-		WantedVolume = 0;
 	m_SoundVolume.store(WantedVolume, std::memory_order_relaxed);
 }
 
