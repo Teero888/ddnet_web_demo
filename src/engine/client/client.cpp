@@ -5444,6 +5444,15 @@ void CClient::SetLoggers(std::shared_ptr<ILogger> &&pFileLogger, std::shared_ptr
 
 extern "C" {
 
+EMSCRIPTEN_KEEPALIVE int EmscriptenDemoIsLoaded()
+{
+	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
+	{
+		return 1;
+	}
+	return 0;
+}
+
 EMSCRIPTEN_KEEPALIVE void EmscriptenDemoStop()
 {
 	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
