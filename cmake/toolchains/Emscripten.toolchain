@@ -36,7 +36,7 @@ set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s EXPORTED_FUNCTIONS=_main,_Emscrip
 set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s EXPORTED_RUNTIME_METHODS=ccall")
 
 # Very important: use same stack size that other platforms have, as the default of 64 KiB that Emscripten uses is too small for our code and causes stack overflows.
-set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s STACK_SIZE=1MB")
+set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s STACK_SIZE=4MB")
 # Even if slower, memory growth has the advantage of using less resources, keep it on for now (instead of a static memory pool).
 set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
 # Maximum of ~2 GiB with WASM32. Using more with WASM64 isn't well supported yet.
@@ -46,7 +46,7 @@ set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s SHARED_MEMORY=1 -Wl,--no-check-fe
 
 # Very important: allow SDL2 and our code to call Emscripten functions to yield control to the browser main thread.
 set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s ASYNCIFY=1")
-set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s ASYNCIFY_STACK_SIZE=1MB")
+set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s ASYNCIFY_STACK_SIZE=2MB")
 
 set(WASM_CXX_FLAGS "${WASM_CXX_FLAGS} -D_REENTRANT")
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -54,9 +54,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set(WASM_CXX_FLAGS "${WASM_CXX_FLAGS} -g")
 	# We need at least O1 else launch fails with `wasm streaming compile failed: CompileError: wasm validation error: at offset 36632790: too many locals`
 	set(WASM_CXX_FLAGS "${WASM_CXX_FLAGS} -O1")
-	set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s ASSERTIONS=2")
+	set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s ASSERTIONS=1")
 	set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s STACK_OVERFLOW_CHECK=2")
-	set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s SAFE_HEAP=1")
 	set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s GL_ASSERTIONS=1")
 	# TODO: With `emmalloc-memvalidate` launch fails with `Assertion failed: multithreadingLock == 1, at: /emsdk/emscripten/system/lib/emmalloc.c,407,validate_memory_regions`
 	set(WASM_LINKER_FLAGS "${WASM_LINKER_FLAGS} -s MALLOC=emmalloc-debug")

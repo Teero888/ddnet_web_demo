@@ -1267,16 +1267,6 @@ void CGameClient::OnStateChange(int NewState, int OldState)
 	// then change the state
 	for(auto &pComponent : m_vpAll)
 		pComponent->OnStateChange(NewState, OldState);
-
-#if defined(CONF_PLATFORM_EMSCRIPTEN)
-	// If the state changes to offline (e.g. demo stopped or failed to load), close the viewer
-	if(NewState == IClient::STATE_OFFLINE && (OldState == IClient::STATE_DEMOPLAYBACK || OldState == IClient::STATE_LOADING))
-	{
-		EM_ASM({
-			if(window.parent) window.parent.postMessage({ type: 'closeDemoViewer' }, '*');
-		});
-	}
-#endif
 }
 
 void CGameClient::OnShutdown()
