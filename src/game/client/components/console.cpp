@@ -1780,6 +1780,15 @@ void CGameConsole::OnInit()
 		m_RemoteConsole.UpdateBacklogTextAttributes();
 		m_RemoteConsole.m_HasSelection = false;
 	});
+	m_LocalConsole.ExecuteLine("unbindall");
+
+	m_LocalConsole.ExecuteLine("bind w zoom+");
+	m_LocalConsole.ExecuteLine("bind s zoom-");
+	m_LocalConsole.ExecuteLine("bind lctrl zoom 10");
+	
+	m_LocalConsole.ExecuteLine("bind kp_plus zoom+");
+	m_LocalConsole.ExecuteLine("bind kp_minus zoom-");
+	m_LocalConsole.ExecuteLine("bind kp_multiply zoom 10");
 }
 
 void CGameConsole::OnStateChange(int NewState, int OldState)
