@@ -2511,7 +2511,8 @@ void CMenus::OnRender()
 	if(Ui()->ConsumeHotkey(CUi::HOTKEY_ESCAPE))
 	{
 		EM_ASM({
-			if(window.parent) window.parent.postMessage({ type: 'closeDemoViewer' }, '*');
+			if(window.parent)
+				window.parent.postMessage({type : 'closeDemoViewer'}, '*');
 		});
 	}
 

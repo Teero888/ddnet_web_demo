@@ -5474,9 +5474,11 @@ EMSCRIPTEN_KEEPALIVE void EmscriptenDemoSetPos(int Tick)
 	if(g_pClient && g_pClient->State() == IClient::STATE_DEMOPLAYBACK)
 	{
 		IGameClient *pGameClient = g_pClient->GameClient();
-		if(pGameClient) pGameClient->SuppressEvents(true);
+		if(pGameClient)
+			pGameClient->SuppressEvents(true);
 		g_pClient->GetDemoPlayer().SetPos(Tick);
-		if(pGameClient) pGameClient->SuppressEvents(false);
+		if(pGameClient)
+			pGameClient->SuppressEvents(false);
 	}
 }
 
@@ -5524,6 +5526,5 @@ EMSCRIPTEN_KEEPALIVE int EmscriptenDemoGetLastTick()
 	}
 	return 0;
 }
-
 }
 #endif

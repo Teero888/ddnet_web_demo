@@ -13,7 +13,6 @@
 #endif
 
 #include <engine/demo.h>
-#include <engine/demo.h>
 #include <engine/font_icons.h>
 #include <engine/graphics.h>
 #include <engine/keys.h>
@@ -715,7 +714,8 @@ void CMenus::RenderDemoPlayer(CUIRect MainView)
 		DemolistOnUpdate(false);
 #if defined(__EMSCRIPTEN__)
 		EM_ASM({
-			if(window.parent) window.parent.postMessage({ type: 'closeDemoViewer' }, '*');
+			if(window.parent)
+				window.parent.postMessage({type : 'closeDemoViewer'}, '*');
 		});
 #endif
 	}
