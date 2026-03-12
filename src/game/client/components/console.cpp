@@ -1789,6 +1789,10 @@ void CGameConsole::OnInit()
 	m_LocalConsole.ExecuteLine("bind kp_plus zoom+");
 	m_LocalConsole.ExecuteLine("bind kp_minus zoom-");
 	m_LocalConsole.ExecuteLine("bind kp_multiply zoom 10");
+
+	m_LocalConsole.ExecuteLine("bind x toggle cl_overlay_entities 0 100");
+	m_LocalConsole.ExecuteLine("bind b toggle cl_overlay_entities 0 100");
+	m_LocalConsole.ExecuteLine("bind pageup toggle cl_overlay_entities 0 100");
 }
 
 void CGameConsole::OnStateChange(int NewState, int OldState)
