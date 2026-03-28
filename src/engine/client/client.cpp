@@ -3286,29 +3286,8 @@ void CClient::Run()
 		if(CtrlShiftKey(KEY_G, LastG))
 			g_Config.m_DbgGraphs ^= 1;
 
-		if(CtrlShiftKey(KEY_E, LastE))
-		{
-			if(g_Config.m_ClEditor)
-				m_pEditor->OnClose();
-			g_Config.m_ClEditor = g_Config.m_ClEditor ^ 1;
-		}
-
 		// render
 		{
-			if(g_Config.m_ClEditor)
-			{
-				if(!m_EditorActive)
-				{
-					Input()->MouseModeRelative();
-					GameClient()->OnActivateEditor();
-					m_pEditor->OnActivate();
-					m_EditorActive = true;
-				}
-			}
-			else if(m_EditorActive)
-			{
-				m_EditorActive = false;
-			}
 
 			Update();
 			int64_t Now = time_get();
